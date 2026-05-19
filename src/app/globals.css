@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #000000;
+  --on-primary: #ffffff;
+  --accent: #FF4D4D;
+  --background: #fdf8f8;
+  --on-background: #1c1b1b;
+  --surface: #fdf8f8;
+  --on-surface: #1c1b1b;
+  --surface-container-low: #f7f3f2;
+  --surface-container-high: #ebe7e6;
+  --outline-variant: #c4c7c7;
+  --secondary: #5d5f5f;
+  --error: #ba1a1a;
+  --transition-speed: 0.3s;
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-on-background: var(--on-background);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-surface-low: var(--surface-container-low);
+  --color-surface-high: var(--surface-container-high);
+  --color-outline-variant: var(--outline-variant);
+  --color-secondary: var(--secondary);
+  --color-error: var(--error);
+  
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  --radius-xl: 16px;
+  --transition-speed: var(--transition-speed);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--on-background);
+  font-family: var(--font-body);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.skill-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: #e2e2e2;
+}
+
+.skill-progress {
+  height: 100%;
+  background: var(--error);
+  border-radius: 2px;
+}
+
+.text-h1 {
+  font-family: var(--font-heading);
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+}
+
+.text-h2 {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.text-h3 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.text-label-caps {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.0;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Add animation keyframes before print rules */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-blink {
+  animation: blink 1.4s infinite;
+}
+
+.animate-float {
+  animation: float 2s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 3s ease-in-out infinite;
+}
+
+/* Custom Scrollbar (For desktop) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f680;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
+
+/* ==========================================================================
+   Print Rules for dynamic A4 PDF
+   ========================================================================== */
+@media print {
+  /* Reset document for white paper printing */
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Inter', -apple-system, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide absolutely everything except the Printable CV container */
+  body > *:not(main),
+  main > *:not(#printable-cv),
+  header,
+  footer,
+  aside,
+  button,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Display printable CV explicitly */
+  #printable-cv {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Setup A4 Size Portrait and Margins */
+  @page {
+    size: A4 portrait;
+    margin: 20mm;
+  }
+
+  /* Prevent page break inside section blocks, list items, and experience cards */
+  .print-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+
