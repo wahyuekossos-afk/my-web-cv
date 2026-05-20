@@ -139,6 +139,19 @@ export default function Home() {
                 <span>{data.location}</span>
               </div>
             )}
+            <div className="flex items-center gap-1.5">
+              <span className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[8px] font-sans">
+                🌐
+              </span>
+              <a 
+                href="https://my-web-cv-theta.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-black font-bold"
+              >
+                My Website
+              </a>
+            </div>
           </div>
         </div>
 
