@@ -142,20 +142,20 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Section: TENTANG SAYA */}
+        {/* Section: ABOUT ME */}
         <div className="py-3 print-avoid-break">
           <h2 className="text-xs font-bold uppercase tracking-wider font-serif text-black border-b border-gray-400 pb-0.5 mb-1.5">
-            TENTANG SAYA
+            ABOUT ME
           </h2>
           <p className="text-[10.5px] text-gray-700 leading-relaxed text-justify">
             {data.about}
           </p>
         </div>
 
-        {/* Section: PENGALAMAN */}
+        {/* Section: EXPERIENCE */}
         <div className="py-3">
           <h2 className="text-xs font-bold uppercase tracking-wider font-serif text-black border-b border-gray-400 pb-0.5 mb-2.5">
-            PENGALAMAN
+            EXPERIENCE
           </h2>
           <div className="space-y-4">
             {experience.map((exp, index) => (
@@ -188,10 +188,10 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Section: KETERAMPILAN */}
+        {/* Section: SKILLS */}
         <div className="py-3 print-avoid-break">
           <h2 className="text-xs font-bold uppercase tracking-wider font-serif text-black border-b border-gray-400 pb-0.5 mb-2">
-            KETERAMPILAN
+            SKILLS
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-3">
             {Object.entries(
@@ -220,7 +220,7 @@ export default function Home() {
 
         {/* PDF Document Footer */}
         <div className="mt-6 pt-3 border-t border-gray-200 text-center text-[8px] text-gray-400 print-avoid-break">
-          <p>Generated dynamically from {data.name}&apos;s Live Portfolio on {new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}.</p>
+          <p>Generated dynamically from {data.name}&apos;s Live Portfolio on {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.</p>
         </div>
       </div>
     </main>
