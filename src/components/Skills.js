@@ -16,11 +16,11 @@ const Skills = ({ skills, title = "Core Expertise" }) => {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap justify-center gap-6">
           {categories.map((cat, catIdx) => (
             <motion.div 
               key={catIdx}
-              className="glass-card p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              className="glass-card p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow w-full md:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
