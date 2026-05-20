@@ -87,7 +87,7 @@ export default function Home() {
         <div className="flex items-center gap-6 pb-4">
           {/* Profile Picture Frame */}
           {data.profilePic ? (
-            <div className="w-24 h-28 border border-gray-300 p-0.5 bg-gray-50 flex-shrink-0">
+            <div className="w-32 h-48 border border-gray-300 p-0.5 bg-gray-50 flex-shrink-0">
               <img 
                 src={data.profilePic} 
                 alt={data.name} 
@@ -95,7 +95,7 @@ export default function Home() {
               />
             </div>
           ) : (
-            <div className="w-24 h-28 border border-gray-300 bg-gray-100 flex-shrink-0 flex items-center justify-center">
+            <div className="w-32 h-48 border border-gray-300 bg-gray-100 flex-shrink-0 flex items-center justify-center">
               <span className="text-gray-400 text-[10px]">Photo</span>
             </div>
           )}
@@ -139,19 +139,18 @@ export default function Home() {
                 <span>{data.location}</span>
               </div>
             )}
-            <div className="flex items-center gap-1.5">
+            <a 
+              href="https://my-web-cv-theta.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 underline text-black font-bold cursor-pointer"
+              style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
+            >
               <span className="w-4 h-4 rounded-full bg-black text-white flex items-center justify-center text-[8px] font-sans">
                 🌐
               </span>
-              <a 
-                href="https://my-web-cv-theta.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-black font-bold"
-              >
-                My Website
-              </a>
-            </div>
+              <span>My Website</span>
+            </a>
           </div>
         </div>
 
