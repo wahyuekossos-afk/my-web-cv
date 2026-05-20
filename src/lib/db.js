@@ -111,12 +111,30 @@ export const addPortfolioItem = async (item) => {
 
 // UPDATE PORTFOLIO ITEM
 export const updatePortfolioItem = async (id, item) => {
+  if (!isFirebaseConfigured()) {
+    if (typeof window !== 'undefined') {
+      const current = await getPortfolio();
+      const updated = current.map(p => p.id === id ? { ...p, ...item } : p);
+      localStorage.setItem('cv_portfolio', JSON.stringify(updated));
+      console.log("Demo Mode: Project updated in localStorage");
+    }
+    return;
+  }
   const itemRef = doc(db, COLLECTIONS.PORTFOLIO, id);
   await updateDoc(itemRef, item);
 };
 
 // DELETE PORTFOLIO ITEM
 export const deletePortfolioItem = async (id) => {
+  if (!isFirebaseConfigured()) {
+    if (typeof window !== 'undefined') {
+      const current = await getPortfolio();
+      const updated = current.filter(p => p.id !== id);
+      localStorage.setItem('cv_portfolio', JSON.stringify(updated));
+      console.log("Demo Mode: Project deleted from localStorage");
+    }
+    return;
+  }
   const itemRef = doc(db, COLLECTIONS.PORTFOLIO, id);
   await deleteDoc(itemRef);
 };

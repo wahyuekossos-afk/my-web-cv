@@ -44,6 +44,7 @@ export default function Dashboard() {
   // Local state for forms
   const [personalInfo, setPersonalInfo] = useState(mockData.personalInfo);
   const [newProject, setNewProject] = useState({ title: '', category: '', description: '', image: '', link: '', driveLink: '' });
+  const [editingProjectId, setEditingProjectId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,20 +90,50 @@ export default function Dashboard() {
     }
   };
 
-  const handleAddProject = async () => {
+  const handleSaveProject = async () => {
+    if (!newProject.title) {
+      alert("Project title is required!");
+      return;
+    }
     setSaving(true);
     try {
-      await addPortfolioItem(newProject);
+      if (editingProjectId) {
+        await updatePortfolioItem(editingProjectId, newProject);
+        setSuccessMsg('Project updated successfully!');
+        setEditingProjectId(null);
+      } else {
+        await addPortfolioItem(newProject);
+        setSuccessMsg('Project added successfully!');
+      }
       const updated = await getPortfolio();
       setProjects(updated);
       setNewProject({ title: '', category: '', description: '', image: '', link: '', driveLink: '' });
-      setSuccessMsg('Project added successfully!');
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       console.error(error);
+      alert("Action failed: " + error.message);
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleEditProject = (project) => {
+    setEditingProjectId(project.id);
+    setNewProject({
+      title: project.title || '',
+      category: project.category || [...new Set(content.skills?.map(s => s.category))][0] || 'Web Developer',
+      description: project.description || '',
+      image: project.image || '',
+      link: project.link || '',
+      driveLink: project.driveLink || ''
+    });
+    // Smooth scroll to top of page where the form is located
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProjectId(null);
+    setNewProject({ title: '', category: '', description: '', image: '', link: '', driveLink: '' });
   };
 
   const handleDeleteProject = async (id) => {
@@ -251,7 +282,22 @@ export default function Dashboard() {
             </div>
           )}
 
+          {!process.env.NEXT_PUBLIC_FIREBASE_API_KEY && (
+            <div className="mb-8 p-6 bg-amber-500/10 border-2 border-dashed border-amber-500/30 rounded-3xl text-amber-700 flex items-start gap-4 shadow-sm">
+              <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center flex-shrink-0 font-bold text-lg">
+                ⚠️
+              </div>
+              <div className="space-y-1">
+                <h4 className="font-extrabold text-sm uppercase tracking-wider text-amber-800">Firebase Env Variables Missing (Mock Mode)</h4>
+                <p className="text-xs leading-relaxed opacity-90">
+                  Aplikasi sedang berjalan dalam mode offline/mock karena variabel lingkungan Firebase belum dikonfigurasi di Vercel. Untuk mengaktifkan penyimpanan database langsung dan fitur upload foto profil/portofolio, silakan buka <strong>Vercel Dashboard &gt; Settings &gt; Environment Variables</strong> dan masukkan semua variabel yang ada di file <code>.env.local</code> Anda.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="max-w-4xl mx-auto">
+
             {/* Header */}
             <div className="flex justify-between items-end mb-10">
               <div>
@@ -814,7 +860,13 @@ export default function Dashboard() {
                 <div className="space-y-8">
                   {/* Add New Project */}
                   <div className="bg-white p-10 rounded-[40px] shadow-sm border border-outline-variant/20">
-                    <h4 className="text-h3 mb-8 flex items-center gap-2"><Plus size={24} /> Add New Project</h4>
+                    <h4 className="text-h3 mb-8 flex items-center gap-2">
+                      {editingProjectId ? (
+                        <>✍️ Edit Project: <span className="text-accent ml-1 font-extrabold">{newProject.title || 'Untitled'}</span></>
+                      ) : (
+                        <><Plus size={24} /> Add New Project</>
+                      )}
+                    </h4>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <label className="text-sm font-bold">Project Title</label>
@@ -899,14 +951,26 @@ export default function Dashboard() {
                         </div>
                       </div>
                     </div>
-                    <button 
-                      onClick={handleAddProject}
-                      className="mt-8 bg-primary text-on-primary w-full py-4 rounded-2xl font-bold hover:bg-accent transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2"
-                    >
-                      <Plus size={20} /> Add Project to Portfolio
-                    </button>
+                    <div className="flex gap-4 mt-8">
+                      {editingProjectId && (
+                        <button 
+                          onClick={handleCancelEdit}
+                          className="flex-1 bg-surface-high hover:bg-slate-100 text-secondary border border-outline-variant/30 py-4 rounded-2xl font-bold transition-all"
+                        >
+                          Cancel Edit
+                        </button>
+                      )}
+                      <button 
+                        onClick={handleSaveProject}
+                        className={`py-4 rounded-2xl font-bold hover:bg-accent transition-all shadow-xl flex items-center justify-center gap-2 ${
+                          editingProjectId ? 'flex-[2] bg-primary text-on-primary shadow-primary/10' : 'w-full bg-primary text-on-primary shadow-primary/10'
+                        }`}
+                      >
+                        {editingProjectId ? '✍️ Update Project' : <><Plus size={20} /> Add Project to Portfolio</>}
+                      </button>
+                    </div>
                   </div>
-
+ 
                   {/* Projects List */}
                   <div className="space-y-4">
                     <h4 className="text-h3 ml-2">Existing Projects</h4>
@@ -917,12 +981,22 @@ export default function Dashboard() {
                           <div className="flex-1">
                             <p className="text-accent text-[10px] font-bold uppercase tracking-widest">{project.category}</p>
                             <h5 className="font-bold text-primary">{project.title}</h5>
-                            <button 
-                              onClick={() => handleDeleteProject(project.id)}
-                              className="text-error text-xs font-bold mt-2 hover:underline flex items-center gap-1"
-                            >
-                              <Trash2 size={12} /> Delete
-                            </button>
+                            <div className="flex gap-3 mt-2">
+                              <button 
+                                onClick={() => handleEditProject(project)}
+                                className="text-primary text-xs font-bold hover:underline flex items-center gap-1"
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                Edit
+                              </button>
+                              <span className="text-secondary/20">|</span>
+                              <button 
+                                onClick={() => handleDeleteProject(project.id)}
+                                className="text-error text-xs font-bold hover:underline flex items-center gap-1"
+                              >
+                                <Trash2 size={12} /> Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}
