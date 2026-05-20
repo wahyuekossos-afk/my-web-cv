@@ -81,13 +81,25 @@ export default function Home() {
       </div>
 
       {/* Dynamic printable A4 CV layout (Bartholomew Henderson-style layout, print-only) */}
-      <div id="printable-cv" className="hidden print:block font-serif text-[#111111] bg-white leading-relaxed max-w-[800px] mx-auto p-2">
+      <div 
+        id="printable-cv" 
+        className="font-serif text-[#111111] bg-white leading-relaxed max-w-[800px] mx-auto p-2"
+        style={{ 
+          position: 'absolute', 
+          left: '-9999px', 
+          top: '-9999px',
+          pointerEvents: 'none'
+        }}
+      >
         {/* Header Block: Picture on left, Name & spaced Title on right */}
 
         <div className="flex items-center gap-6 pb-4">
           {/* Profile Picture Frame */}
           {data.profilePic ? (
-            <div className="w-32 h-48 border border-gray-300 p-0.5 bg-gray-50 flex-shrink-0">
+            <div 
+              className="border border-gray-300 p-0.5 bg-gray-50 flex-shrink-0"
+              style={{ width: '4cm', height: '6cm' }}
+            >
               <img 
                 src={data.profilePic} 
                 alt={data.name} 
@@ -95,7 +107,10 @@ export default function Home() {
               />
             </div>
           ) : (
-            <div className="w-32 h-48 border border-gray-300 bg-gray-100 flex-shrink-0 flex items-center justify-center">
+            <div 
+              className="border border-gray-300 bg-gray-100 flex-shrink-0 flex items-center justify-center"
+              style={{ width: '4cm', height: '6cm' }}
+            >
               <span className="text-gray-400 text-[10px]">Photo</span>
             </div>
           )}
