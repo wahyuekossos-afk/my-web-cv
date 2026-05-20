@@ -1,5 +1,5 @@
 # Project Status: Interactive Professional CV & CMS
-**Last Updated: 2026-05-09**
+**Last Updated: 2026-05-20**
 
 This document serves as a handover for any AI assistant or developer continuing this project.
 
@@ -7,7 +7,7 @@ This document serves as a handover for any AI assistant or developer continuing 
 - **Framework**: Next.js 14 (App Router)
 - **Styling**: Tailwind CSS + Framer Motion (Animations)
 - **Icons**: Lucide-React
-- **Backend**: Firebase (Firestore & Authentication)
+- **Backend**: Firebase (Firestore, Firebase Storage & Authentication)
 
 ## 📁 Key Project Structure
 - `/src/app/page.js`: Main landing page (consumes dynamic data).
@@ -15,6 +15,7 @@ This document serves as a handover for any AI assistant or developer continuing 
 - `/src/lib/firebase.js`: Firebase initialization logic.
 - `/src/lib/db.js`: Database operations (get/update content, portfolio, messages).
 - `/src/lib/auth.js`: Authentication logic (login/logout).
+- `/src/lib/storage.js`: Firebase Storage upload helpers.
 - `/src/components/`: Reusable UI components (Hero, About, Skills, Experience, Portfolio, Contact).
 
 ## 🔧 Firebase Configuration
@@ -24,6 +25,7 @@ The project is connected to Firebase project: `cv-wahyu`.
   - `content` collection: `main` document holds `personalInfo`, `skills`, `experience`, `skillsTitle`.
   - `portfolio` collection: Individual documents for each project.
   - `messages` collection: Contact form submissions.
+- **Storage**: Used for profile pictures and portfolio project images.
 
 ## ✅ Completed Features
 1.  **Fully Dynamic Landing Page**: All text, skills, experiences, and projects come from Firestore.
@@ -33,21 +35,23 @@ The project is connected to Firebase project: `cv-wahyu`.
     - **Skills**: Dedicated Category Manager (add/delete containers) and skill items with level bars.
     - **Experience**: Timeline manager with auto-sorting by year.
     - **Contact Info**: Edit contact details, footer social links, and section text.
-    - **Portfolio**: Add/Remove projects with image URLs.
+    - **Portfolio Manager**: Add/Update/Remove projects. Supports editing details of existing items in place!
     - **Inbox**: View and delete messages from the contact form.
-3.  **Firebase Integration**:
+3.  **Firebase & Storage Integration**:
+    - **Direct File Uploads**: Profile picture and Project images can be uploaded directly to Firebase Storage.
+    - **Smart Paste to Upload**: Copy any image to clipboard and paste (`Ctrl+V`) inside the CMS dashboard to automatically upload it!
     - Automatic fallback to `localStorage` (Demo Mode) if Firebase is not configured.
-    - Proper error handling and loading states in CMS.
+4.  **A4 PDF Download Feature**:
+    - Integrated clean print-friendly PDF generation for A4 sized print matching web CV aesthetics without breaking sections.
 
 ## 🛠 Maintenance & Next Steps
 - **Security**: Current Firestore rules are open for development (`allow read, write: if true`). These should be restricted to `allow read: if true; allow write: if request.auth != null;` before official launch.
-- **Deployment**: Best deployed on **Vercel**. Ensure all `NEXT_PUBLIC_FIREBASE_*` variables from `.env.local` are added to Vercel Environment Variables.
-- **Images**: Profile and Portfolio images currently use URLs. A future improvement could be adding Firebase Storage for direct image uploads.
+- **Deployment**: Deployed on **Vercel**. Ensure all `NEXT_PUBLIC_FIREBASE_*` variables from Vercel dashboard matches `.env.local` to disable Demo Mode.
 
 ## 💡 Notes for Next Agent
 - The `Experience` component uses `year || period` and `title || role` to maintain compatibility between CMS inputs and legacy data.
 - The `Skills` section uses a `skillsTitle` field in the database for the "Core Expertise" heading.
-- If saving hangs, check Firebase Console -> Firestore -> Rules and ensure they are "Published".
+- Portfolio items have full **Edit/Update** functionality implemented; clicking "Edit" will populate the creation form, scroll the user smoothly to the top, and allow modification/saving directly.
 
 ---
 *Created by Antigravity AI*
